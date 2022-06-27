@@ -1,15 +1,17 @@
-import { Environment, OrbitControls, PerspectiveCamera } from "@react-three/drei"; 
+import { Environment, OrbitControls, PerspectiveCamera, SpotLight } from "@react-three/drei"; 
 import * as THREE from 'three';
-import { useEffect, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
-import Model from "./models/isometrics"
+import React, { useEffect, useState, useRef } from "react";
+import Isometric from "./models/Isometric"
 
-export default function Three(){
+const Three = React.forwardRef((prop, ref) => {
     return (
         <>
-					<PerspectiveCamera makeDefault position={[500, 500, 500]}/>
+					<PerspectiveCamera makeDefault position={[-10, 5, 10]}/>
+					<OrbitControls />
 
-					<Model />
+					<Isometric ref={ref}/>
+
+					<SpotLight position={[-10, 10, 10]} color="#ffffff" distance={30} intensity={1} angle={Math.PI/3}/>
 
 					<Environment background>
 						<mesh>
@@ -19,4 +21,6 @@ export default function Three(){
 					</Environment>
         </>
     )
-}
+});
+
+export default Three;
