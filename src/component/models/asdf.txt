@@ -6,12 +6,41 @@ source: https://sketchfab.com/3d-models/low-poly-isometric-rooms-d53af0ad289a403
 title: Low Poly Isometric Rooms
 */
 
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
+import gsap from 'gsap'
 
-const Isometric = React.forwardRef((props, ref) => {
+const Isometric = (...props) => {
   const group = useRef();
-  const { nodes, materials } = useGLTF('/glb/isometric.glb')
+  const { nodes, materials } = useGLTF('/glb/isometric.glb');
+
+	function onClickFurniture(event){
+		event.eventObject.visible = false;
+	}
+
+	function onClickRoom(event){
+		if (!!props[0].camera.current){
+		
+			const timeline = gsap.timeline({paused : true});
+
+			timeline.to(props[0].camera.current.position, {
+				x : -event.eventObject.position.x*0.01 - 4.5,
+				y : event.eventObject.position.y*0.01 + 4.5,
+				z : -event.eventObject.position.z*0.01 + 4.5,
+				duration : 0.8,
+				ease : "power1.out"
+			});
+			timeline.to(props[0].orbit.current.target, {
+				x : -event.eventObject.position.x*0.01,
+				y : event.eventObject.position.y*0.01,
+				z : -event.eventObject.position.z*0.01,
+				duration : 0.8,
+				ease : "power1.out"
+			}, "<");
+
+			timeline.play();
+		}
+	}
 
   return (
     <group ref={group} {...props} dispose={null}>
@@ -20,17 +49,17 @@ const Isometric = React.forwardRef((props, ref) => {
           <group name="6e9b1227653e48a397b3734fb7bf463afbx" rotation={[Math.PI / 2, 0, 0]}>
             <group name="RootNode">
               <group name="Scene_1" scale={0.01}>
-                <group name="Room1" position={[0, 275, 365]}>
+                <group name="Room1" onClick={onClickRoom} position={[0, 275, 365]}>
                   <group name="Walls2">
                     <mesh name="Walls2_Colors_0" geometry={nodes.Walls2_Colors_0.geometry} material={materials.Colors} />
                   </group>
-                  <group name="Telescope" ref={ref} position={[-5.01, 5, 162.68]}>
+                  <group name="Telescope" onClick={onClickFurniture} position={[-5.01, 5, 162.68]}>
                     <mesh name="Telescope_Colors_0" geometry={nodes.Telescope_Colors_0.geometry} material={materials.Colors} />
                   </group>
-                  <group name="Bed" position={[65, 5, 99.73]} rotation={[-Math.PI, 0, -Math.PI]}>
+                  <group name="Bed" onClick={onClickFurniture} position={[65, 5, 99.73]} rotation={[-Math.PI, 0, -Math.PI]}>
                     <mesh name="Bed_Colors_0" geometry={nodes.Bed_Colors_0.geometry} material={materials.Colors} />
                   </group>
-                  <group name="Flooring" rotation={[0, Math.PI / 2, 0]}>
+                  <group name="Flooring" onClick={onClickFurniture} rotation={[0, Math.PI / 2, 0]}>
                     <group name="Wood_Plank1" position={[0, 2.5, 100]}>
                       <mesh name="Wood_Plank1_Colors_0" geometry={nodes.Wood_Plank1_Colors_0.geometry} material={materials.Colors} />
                     </group>
@@ -54,14 +83,14 @@ const Isometric = React.forwardRef((props, ref) => {
                     </group>
                   </group>
                   <group name="Wall_Shelves">
-                    <group name="Shelf1" position={[-155, 200, -44.13]}>
+                    <group name="Shelf1" onClick={onClickFurniture} position={[-155, 200, -44.13]}>
                       <mesh name="Shelf1_Colors_0" geometry={nodes.Shelf1_Colors_0.geometry} material={materials.Colors} />
                     </group>
-                    <group name="Shelf2" position={[-155, 155, 50]}>
+                    <group name="Shelf2" onClick={onClickFurniture} position={[-155, 155, 50]}>
                       <mesh name="Shelf2_Colors_0" geometry={nodes.Shelf2_Colors_0.geometry} material={materials.Colors} />
                     </group>
                   </group>
-                  <group name="Books">
+                  <group name="Books1" onClick={onClickFurniture}>
                     <group name="Book5" position={[-154.5, 174.81, 30.12]} rotation={[-Math.PI / 10, 0, 0]}>
                       <mesh name="Book5_Colors_0" geometry={nodes.Book5_Colors_0.geometry} material={materials.Colors} />
                     </group>
@@ -80,6 +109,8 @@ const Isometric = React.forwardRef((props, ref) => {
                     <group name="Book" position={[-152.26, 174, -21.22]}>
                       <mesh name="Book_Colors_0" geometry={nodes.Book_Colors_0.geometry} material={materials.Colors} />
                     </group>
+									</group>
+									<group name="Books2" onClick={onClickFurniture}>
                     <group name="Book6" position={[-152.26, 219, -74.43]}>
                       <mesh name="Book6_Colors_0" geometry={nodes.Book6_Colors_0.geometry} material={materials.Colors} />
                     </group>
@@ -98,6 +129,8 @@ const Isometric = React.forwardRef((props, ref) => {
                     <group name="Book11" position={[-150.77, 218.99, -14.95]} rotation={[-1.57, -0.01, -0.09]}>
                       <mesh name="Book11_Colors_0" geometry={nodes.Book11_Colors_0.geometry} material={materials.Colors} />
                     </group>
+									</group>
+									<group name="BookOnDesk" onClick={onClickFurniture}>
                     <group name="Book12" position={[-104.35, 76, -133.3]} rotation={[-Math.PI / 2, 0, -0.37]}>
                       <mesh name="Book12_Colors_0" geometry={nodes.Book12_Colors_0.geometry} material={materials.Colors} />
                     </group>
@@ -105,7 +138,7 @@ const Isometric = React.forwardRef((props, ref) => {
                       <mesh name="Book13_Colors_0" geometry={nodes.Book13_Colors_0.geometry} material={materials.Colors} />
                     </group>
                   </group>
-                  <group name="Table">
+                  <group name="Table" onClick={onClickFurniture}>
                     <group name="Top">
                       <mesh name="Top_Colors_0" geometry={nodes.Top_Colors_0.geometry} material={materials.Colors} />
                     </group>
@@ -125,7 +158,7 @@ const Isometric = React.forwardRef((props, ref) => {
                       <mesh name="Leg3_Colors_0" geometry={nodes.Leg3_Colors_0.geometry} material={materials.Colors} />
                     </group>
                   </group>
-                  <group name="PC_Setup">
+                  <group name="PC_Setup" onClick={onClickFurniture}>
                     <group name="Computer" position={[-93.6, 20.15, -38.58]} rotation={[-Math.PI, 1.48, -Math.PI]} scale={0.5}>
                       <mesh name="Computer_Colors_0" geometry={nodes.Computer_Colors_0.geometry} material={materials.Colors} />
                     </group>
@@ -139,7 +172,7 @@ const Isometric = React.forwardRef((props, ref) => {
                       <mesh name="Mouse_Colors_0" geometry={nodes.Mouse_Colors_0.geometry} material={materials.Colors} />
                     </group>
                   </group>
-                  <group name="Curtains">
+                  <group name="Curtains" onClick={onClickFurniture}>
                     <group name="Top_1" position={[50, 210, 160]}>
                       <mesh name="Top_Colors_0_1" geometry={nodes.Top_Colors_0_1.geometry} material={materials.Colors} />
                     </group>
@@ -179,7 +212,7 @@ const Isometric = React.forwardRef((props, ref) => {
                       </group>
                     </group>
                   </group>
-                  <group name="Chair" position={[-21.79, 0, 16.03]} rotation={[0, -0.27, 0]}>
+                  <group name="Chair" onClick={onClickFurniture} position={[-21.79, 0, 16.03]} rotation={[0, -0.27, 0]}>
                     <group name="Leg14" position={[350, -269.5, -65.17]}>
                       <mesh name="Leg14_Colors_0" geometry={nodes.Leg14_Colors_0.geometry} material={materials.Colors} />
                     </group>
@@ -191,7 +224,7 @@ const Isometric = React.forwardRef((props, ref) => {
                     </group>
                   </group>
                 </group>
-                <group name="Room2" position={[-365, 275, 0]}>
+                <group name="Room2" onClick={onClickRoom} position={[-365, 275, 0]}>
                   <group name="Walls2_1" position={[365, -275, 0]}>
                     <mesh name="Walls2_Colors_0_1" geometry={nodes.Walls2_Colors_0_1.geometry} material={materials.Colors} />
                   </group>
@@ -452,7 +485,7 @@ const Isometric = React.forwardRef((props, ref) => {
                     <mesh name="Paper_Roll_Colors_0" geometry={nodes.Paper_Roll_Colors_0.geometry} material={materials.Colors} />
                   </group>
                 </group>
-                <group name="Room3" position={[365, 0, 365]}>
+                <group name="Room3" onClick={onClickRoom} position={[365, 0, 365]}>
                   <group name="Walls">
                     <mesh name="Walls_Colors_0" geometry={nodes.Walls_Colors_0.geometry} material={materials.Colors} />
                   </group>
@@ -585,7 +618,7 @@ const Isometric = React.forwardRef((props, ref) => {
                     </group>
                   </group>
                 </group>
-                <group name="Room4">
+                <group name="Room4" onClick={onClickRoom}>
                   <group name="Walls_1">
                     <mesh name="Walls_Colors_0_1" geometry={nodes.Walls_Colors_0_1.geometry} material={materials.Colors} />
                   </group>
@@ -738,7 +771,7 @@ const Isometric = React.forwardRef((props, ref) => {
                     <mesh name="Picture_Colors_0" geometry={nodes.Picture_Colors_0.geometry} material={materials.Colors} />
                   </group>
                 </group>
-                <group name="Room5" position={[-365, 0, -365]}>
+                <group name="Room5" onClick={onClickRoom} position={[-365, 0, -365]}>
                   <group name="Walls_2">
                     <mesh name="Walls_Colors_0_2" geometry={nodes.Walls_Colors_0_2.geometry} material={materials.Colors} />
                   </group>
@@ -879,7 +912,7 @@ const Isometric = React.forwardRef((props, ref) => {
                     <mesh name="Carpet2_Colors_0" geometry={nodes.Carpet2_Colors_0.geometry} material={materials.Colors} />
                   </group>
                 </group>
-                <group name="Room6" position={[365, -275, 0]}>
+                <group name="Room6" onClick={onClickRoom} position={[365, -275, 0]}>
                   <group name="Tissue_Box1" position={[-289.41, 73.5, 194.2]} rotation={[0, 0.9, 0]}>
                     <mesh name="Tissue_Box1_Colors_0" geometry={nodes.Tissue_Box1_Colors_0.geometry} material={materials.Colors} />
                   </group>
@@ -1063,7 +1096,7 @@ const Isometric = React.forwardRef((props, ref) => {
                     </group>
                   </group>
                 </group>
-                <group name="Room7" position={[0, -275, -365]}>
+                <group name="Room7" onClick={onClickRoom} position={[0, -275, -365]}>
                   <group name="Walls1">
                     <mesh name="Walls1_Colors_0" geometry={nodes.Walls1_Colors_0.geometry} material={materials.Colors} />
                   </group>
@@ -1187,7 +1220,7 @@ const Isometric = React.forwardRef((props, ref) => {
       </group>
     </group>
   )
-});
+};
 
 useGLTF.preload('/glb/isometric.glb')
 export default Isometric;

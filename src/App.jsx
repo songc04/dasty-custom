@@ -1,23 +1,31 @@
 import { Canvas } from "@react-three/fiber";
-import { Suspense, useState, useRef } from "react";
+import { Suspense, useState, useRef, useMemo } from "react";
 import './App.css'
-import Three from './component/Three.jsx'
+import Catalog from "./component/Catalog";
+import Main from './component/Main'
 
 function App() {
-	const furn = useRef(null);
+	const [catalNum, setCatalNum] = useState(0);
 
   return (
 		<div>
-		<button onClick={() => {
-			if (!!furn.current){
-			furn.current.visible = !furn.current.visible;
-		}}}>toggle</button>
-
-    <Canvas id="three-canvas-container" shadows>
-      <Suspense fullback={null}>
-        <Three ref={furn}/>
-      </Suspense>
-    </Canvas>
+			<div id="top-bar">
+				<button>show catalog</button>
+				<button onClick={()=>setCatalNum(catalNum-1)}>prev</button>
+				<button onClick={()=>setCatalNum(catalNum+1)}>next</button>
+			</div>
+			<div id="canvas-body">
+				<Canvas id="canvas-container" className="with-catalog">
+    		  <Suspense fallback={null}>
+    		    <Main />
+    		  </Suspense>
+    		</Canvas>
+				<Canvas id="catalog">
+    		  <Suspense fallback={null}>
+    		    <Catalog furnNum={catalNum}/>
+    		  </Suspense>
+    		</Canvas>
+			</div>
 		</div>
   );
 }

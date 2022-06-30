@@ -2,6 +2,28 @@ body {
 	background-color: #000000;
 }
 
-#three-canvas-container {
-	height: 100vh !important;
+#top-bar{
+	height: 4vh;
+	background-color: aliceblue;
+	
+}
+
+#canvas-body{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+}
+
+#canvas-container{
+	height: 95vh !important;
+}
+
+#canvas-container.with-catalog{
+	width: 70vw !important;
+}
+
+#catalog{
+	width: 30vw !important;
+	height: 95vh !important;
 }
